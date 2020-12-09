@@ -1,137 +1,143 @@
-import React, {useState, useEffect} from "react";
-
+import React, {Component} from "react";
+import firebase from "../../database/firebase_config"
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-  Button
+  Button, 
+  Alert,
+  ActivityIndicator,
+  Image
 } from "react-native";
-import * as firebase from 'firebase';
-import * as FirebaseCore from 'expo-firebase-core';
 // import * as SecureStore from 'expo-secure-store';
 
 
-export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  if (!firebase.apps.length) {
-    firebase.initializeApp(FirebaseCore.DEFAULT_WEB_APP_OPTIONS);
-  }
-  async function signIn(){
-    try {
-      const res= firebase.auth()
-        .signInWithEmailAndPassword(email, password);
-        //將使用者輸入的帳號與密碼傳給firebase進行驗證
-      console.log('User login successfully!');
-      const loginString = JSON.stringify({email:email, password:password});
-
-      await SecureStore.setItemAsync("login", loginString);
-      setEmail('');
-      setPassword('');
-      setMessage('');
+export default class SignIn extends Component {
+  constructor() {
+    super();
+    this.state = { 
+      email: '', 
+      password: '',
+      isLoading: false
     }
-    catch(error){
-      setMessage(error.message);
-    } 
-   };
-   async function getAccount(){
-
-    try {
-
-      console.log("getAccount");
-
-      setMessage("getting username");
-
-      const loginString = await SecureStore.getItemAsync("login");
-
-      const login = JSON.parse(loginString);
-
-      setEmail(login.email);
-
-      setPassword(login.password);
-
-      setMessage("");
-
-    }
-
-    catch(error){
-
-      setMessage(error.message)
-
-    }
-
-
-
   }
 
-  useEffect(()=>{getAccount()},[]);
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>—Welcome—</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="email"
-        placeholderTextColor="#6E6EFF"
-        returnKeyType="next" //返回鍵後到下一個Textinput
-        onChangeText={text=>setEmail(text)}
-      />
-      <TextInput
-        style={[styles.input, { marginBottom: 30 }]}
-        placeholder="password"
-        placeholderTextColor="#6E6EFF"
-        returnKeyType="next" //返回鍵後到下一個Textinput
-        onChangeText={text=>setPassword(text)}
-        secureTextEntry={true}//*****
-      />
-      
-      <TouchableOpacity stlye={styles.btn} onPress={signIn}>
-        <Text style={styles.btnword}>   LOGIN   </Text>
-      </TouchableOpacity>
-      <Text>{message}</Text>
-        <Button style={styles.txt2} title="Froget your password?"/>
-      
-      
-    </View>
-  );
+  updateInputVal = (val, prop) => {
+    const state = this.state;
+    state[prop] = val;
+    this.setState(state);
+  }
+
+  userSignin = () => {
+    if(this.state.email === '' && this.state.password === '') {
+      Alert.alert('Enter details to signin!')
+    } else {
+      this.setState({
+        isLoading: true,
+      })
+      firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((res) => {
+        console.log(res)
+        console.log('User logged-in successfully!')
+        this.setState({
+          isLoading: false,
+          email: '', 
+          password: ''
+        })
+        this.props.navigation.navigate('Home')
+      })
+      .catch(error => this.setState({ errorMessage: error.message }))
+    }
+  }
+
+  render() {
+    if(this.state.isLoading){
+      return(
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E"/>
+        </View>
+      )
+    }    
+    return (
+      <View style={styles.container}>
+        <View style={styles.circle}>
+      <Image
+            style={styles.center}
+            source={require("../../assets/money.png")}
+          />
+          </View>  
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="電子信箱"
+          value={this.state.email}
+          onChangeText={(val) => this.updateInputVal(val, 'email')}
+        />
+        <TextInput
+          style={styles.inputStyle}
+          placeholder="密碼"
+          value={this.state.password}
+          onChangeText={(val) => this.updateInputVal(val, 'password')}
+          maxLength={15}
+          secureTextEntry={true}
+        />   
+        <Button
+          color="#7c7877"
+          title="登入"
+          onPress={() => this.userSignin()}
+        />   
+
+        <Text 
+          style={styles.loginText}
+          onPress={() => this.props.navigation.navigate('SignUp')}>
+          還沒註冊嗎? 點我註冊
+        </Text>                          
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe4c4",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    padding: 35,
+    backgroundColor: '#fff'
+  },
+  inputStyle: {
+    width: '100%',
+    marginBottom: 15,
+    paddingBottom: 15,
+    alignSelf: "center",
+    borderColor: "#ccc",
+    borderBottomWidth: 1
+  },
+  loginText: {
+    color: '#7c7877',
+    marginTop: 25,
+    textAlign: 'center'
+  },
+  preloader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
+  },
+  center: {
+    width: 120,
+    height: 120,
     alignItems: "center",
     justifyContent: "center",
-  },
-  text: {
-    color: "#6E6EFF",
-    fontSize: 32,
-    fontWeight: "800",
-    marginBottom: 20,
-  },
-  input: {
-    fontSize: 20,
-    marginVertical: 10,
-    padding: 8,
-    width: 220,
-    backgroundColor: "#fff",
-    borderRadius: 18,
-  },
-  btnword: {
-    justifyContent: "center",
-    padding:5,
-    height:35,
-    fontSize: 19,
-    color: "#ffe4c4",
-    backgroundColor: "#6E6EFF",
-    marginBottom: 10,
-  },
-  txt2: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "red",
+    marginTop: -200,
+    marginLeft: 110,
   },
 });
