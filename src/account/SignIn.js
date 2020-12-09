@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import {
   StyleSheet,
@@ -26,6 +26,9 @@ export default function SignIn() {
         .signInWithEmailAndPassword(email, password);
         //將使用者輸入的帳號與密碼傳給firebase進行驗證
       console.log('User login successfully!');
+      const loginString = JSON.stringify({email:email, password:password});
+
+      await SecureStore.setItemAsync("login", loginString);
       setEmail('');
       setPassword('');
       setMessage('');
@@ -34,6 +37,37 @@ export default function SignIn() {
       setMessage(error.message);
     } 
    };
+   async function getAccount(){
+
+    try {
+
+      console.log("getAccount");
+
+      setMessage("getting username");
+
+      const loginString = await SecureStore.getItemAsync("login");
+
+      const login = JSON.parse(loginString);
+
+      setEmail(login.email);
+
+      setPassword(login.password);
+
+      setMessage("");
+
+    }
+
+    catch(error){
+
+      setMessage(error.message)
+
+    }
+
+
+
+  }
+
+  useEffect(()=>{getAccount()},[]);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>—Welcome—</Text>
