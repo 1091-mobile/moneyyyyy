@@ -1,150 +1,147 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { greaterThan } from "react-native-reanimated";
+import React, { useState, useEffect } from "react";
 import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-} from "react-native-table-component";
-export default class cash extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tableHead: ["編號", "品項", "金額"],
-      tableTitle: ["1", "2", "3", "4"],
-      tableData: [
-        ["雞翅", "3000"],
-        ["雞翅", "3000"],
-        ["雞翅", "3000"],
-        ["雞翅", "3000"],
-      ],
-    };
-  }
-  render() {
-    const state = this.state;
-    return (
-      <View style={styles.container}>
-        {/* 標題 */}
-        <View style={styles.title}>
-          <Text style={styles.text}>記帳專區</Text>
-        </View>
-        {/* 內容 */}
-        <View style={styles.details}>
-          {/* 表格 */}
-          <Table style={styles.table}>
-            <Row
-              data={state.tableHead}
-              flexArr={[1.3,2,2]}
-              style={styles.head}
-              textStyle={styles.text1}
-            />
-            <ScrollView>
-              <TableWrapper
-                style={styles.wrapper}
-                borderStyle={{
-                  borderWidth: 2,
-                  borderColor: "rgba(240,229,222,0.6)",
-                }}
-              >
-                <Col
-                  // flexArr={[2]}
-                  data={state.tableTitle}
-                  style={styles.title}
-                  textStyle={styles.text2}
-                />
-                <Rows
-                  data={state.tableData}
-                  flexArr={[1]}
-                  style={styles.row}
-                  textStyle={styles.text3}
-                />
-              </TableWrapper>
-            </ScrollView>
-          </Table>
-          <View style={styles.total}>
-            <Text style={styles.text2}>總金額：</Text>
-            <Text style={styles.text2}>12000</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-}
+  FlatList,
+  View,
+  Text,
+  YellowBox,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
+import * as firebase from "firebase";
+import firestore from "firebase/firestore";
+import { config } from "../../firebase_config";
+import { ScrollView } from "react-native-gesture-handler";
 
+export default function page1({ navigation }) {
+  //似乎是因為firebase與react native的相容問題，所以會跳出警告訊息
+  YellowBox.ignoreWarnings(["Setting a timer"]);
+
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
+
+  const renderItem = ({ item, index }) => (
+    <ScrollView>
+      <View style={styles.item}>
+        <Text style={styles.text3}>&#12288;{index+1}</Text>
+        <Text style={styles.text3}>{item.class}</Text>
+        <Text style={styles.text3}>{item.data}</Text>
+        <Text style={styles.text3}>{item.name}</Text>
+        <Text style={styles.text3}>{item.price}</Text>
+      </View>
+    </ScrollView>
+  );
+
+  //啟動firebase app為避免重複啟動，檢查一下
+  if (!firebase.apps.length) {
+    firebase.initializeApp(config);
+  }
+
+  //啟動firestore
+  const db = firebase.firestore();
+  //把讀取的資料放到state，才會讓資料現在flatlist
+  const [records, setRecords] = useState([]);
+  //讀取
+  async function readData() {
+    const newRecords = [];
+    try {
+      //及時連到record這個集合，get他的值
+      const querySnapshot = await db.collection("record").get();
+
+      querySnapshot.forEach((doc) => {
+        const newRecord = {
+          class: doc.data().classification,
+          date: doc.data().data,
+          name: doc.data().name,
+          price: doc.data().price,
+        };
+
+        newRecords.push(newRecord);
+      }); //foreach
+
+      setRecords(newRecords);
+    } catch (e) {
+      //try
+
+      console.log(e);
+    }
+  } //readData
+
+  useEffect(() => {
+    readData();
+  }, []);
+  //頁面顯示主程式碼
+  return (
+    <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.text}>記帳簿</Text>
+      </View>
+      <View style={styles.details}>
+        <View style={styles.head}>
+          <Text style={styles.text2}>&#12288;</Text>
+          <Text style={styles.text2}>類別</Text>
+          <Text style={styles.text2}>日期</Text>
+          <Text style={styles.text2}>項目</Text>
+          <Text style={styles.text2}>金額</Text>
+        </View>
+
+        <FlatList
+          data={records}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => "" + index}
+        ></FlatList>
+      </View>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffe4c4",
-    alignItems: "center",
     justifyContent: "center",
-  },
-  text: {
-    color: "#6E6EFF",
-    fontSize: 32,
-    fontWeight: "800",
-    
-  },
-  details: {
-    backgroundColor: "rgba(240,229,222,0.6)",
-    width: 380,
-    borderRadius: 20,
     alignItems: "center",
-    height: 700,
-  },
-  table: {
-    marginTop: 20,
-    backgroundColor: "rgba(184,112,54,0.1)",
-    width: 350,
-    borderRadius: 20,
-    height: 600,
-  },
-  head: {
-    height: 30,
-    backgroundColor: "rgba(184,112,54,0.4)",
-    alignItems: "center",
-    justifyContent: "center",
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-  },
-  wrapper: {
-    flex: 1,
-    flexDirection: "row",
-    // borderRadius: 10,
-    height: 150, //再做調整
-    
+    flexDirection: "column",
   },
   title: {
-    flex: 0.3,
+    marginTop: 150,
+    backgroundColor: "#ffe4c4",
+  },
+  details: {
+    marginTop: 20,
+    backgroundColor: "rgba(184,112,54,0.1)" ,
+    borderRadius: 20,
+    height: 800,
+  },
+  head: {
+    flexDirection: "row",
+    backgroundColor: "rgba(184,112,54,0.4)",
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    height: 50,
+    justifyContent: "center",
     alignItems: "center",
   },
-  row: {
-    flex: 0.7,
+  item: {
+    // flex: 1,
+    backgroundColor: "rgba(184,112,54,0.1)",
+    flexDirection: "row",
+    marginVertical: 3, //間距
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  text1: {
-    textAlign: "center",
-    color: "rgba(110,44,0,1)",
-    fontSize: 20,
+  text: {
+    fontSize: 50,
+    color: "rgba(110,44,0,5)",
+    fontWeight: "500",
   },
   text2: {
-    textAlign: "center",
-    color: "rgba(110,44,0,1)",
-    fontSize: 16,
+    fontSize: 24,
+    width: 80,
+    color: "rgba(110,44,0,4)",
   },
   text3: {
-    textAlign: "center",
-    fontSize: 16,
+    fontSize: 24,
+    width: 80,
+    color: "rgba(110,44,0,3)",
   },
-  total: {
-    flexDirection: "row",
-    marginTop: 20,
-    marginHorizontal: 20,
-  },
-  text2: {
-    fontSize: 20,
-    color: "rgba(110,44,0,1)",
-   
-  }
 });
