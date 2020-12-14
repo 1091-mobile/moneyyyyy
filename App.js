@@ -6,7 +6,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import SignIn from "./src/account/SignIn";
 import SignUp from "./src/account/SignUp";
-import HomeScreen from "./homescreen"
+import HomeScreen from "./homescreen";
+import Chart from "./src/chart/Chart";
 
 //const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,6 +29,7 @@ function App() {
         <Tab.Screen name="SignIn" component={SignIn} />
         <Tab.Screen name="SingUp" component={SignUp} />
         <Tab.Screen name="HomeSceen" component={HomeScreen} />
+        <Tab.Screen name="Chart" component={Chart} />
       </Tab.Navigator>
     </NavigationContainer>
   );
