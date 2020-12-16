@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { firebase } from './src/firebase/config'
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen } from './src/screens'
+import { LoginScreen, HomeScreen, RegistrationScreen} from './src/screens'
 
 const Stack = createStackNavigator();
 
@@ -84,6 +84,7 @@ export default function App() {
                   },
                   headerTintColor: '#fff',
                 }} />
+               
             </>
           )}
       </Stack.Navigator>

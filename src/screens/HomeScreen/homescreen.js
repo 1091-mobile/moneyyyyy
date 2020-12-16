@@ -11,6 +11,7 @@ import { firebase } from '../../firebase/config'
 
 import page1 from './page1';
 import page2 from './page2';
+import chart from '../ChartScreen/Chart';
 
 function SignOut({ navigation }) {
   return (
@@ -46,6 +47,8 @@ function MyDrawer() {
       <Drawer.Screen name="記帳點我" component={page1} />
       <Drawer.Screen name="圖表看我" component={page2} />
       <Drawer.Screen name="登出走這裡" component={SignOut}/>
+      <Drawer.Screen name="真正的圖表看這裡" component={chart}/>
+      
     </Drawer.Navigator>
   );
 }
