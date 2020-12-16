@@ -7,7 +7,8 @@ import { WebView } from 'react-native-webview';
 function App(){
   
   return (
-  <WebView source={{ uri: 'https://codepen.io/0430shinyu/full/NWRdEYb' }} style={{ marginTop: 20 }} />
+      
+  <WebView source={{ uri: 'https://codepen.io/0430shinyu/full/NWRdEYb' }} style={{ marginTop: -200 }} />
   );
 }
 
