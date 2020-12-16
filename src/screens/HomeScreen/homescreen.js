@@ -7,8 +7,10 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import page1 from './src/homescreen/page1';
-import page2 from './src/homescreen/page2';
+import { firebase } from '../../firebase/config'
+
+import page1 from './page1';
+import page2 from './page2';
 
 function SignOut({ navigation }) {
   return (
@@ -48,7 +50,7 @@ function MyDrawer() {
   );
 }
 
-export default function App() {
+export default function homescreen() {
   return (
     
       <MyDrawer />

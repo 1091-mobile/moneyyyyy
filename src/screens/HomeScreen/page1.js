@@ -7,9 +7,11 @@ import {
   StyleSheet,
   StatusBar,
 } from "react-native";
-import * as firebase from "firebase";
-import firestore from "firebase/firestore";
-import { config } from "../../firebase_config";
+import { firebase } from '../../firebase/config'
+
+// import * as firebase from "firebase";
+// import firestore from "firebase/firestore";
+// import { config } from "../../firebase_config";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function page1({ navigation }) {
