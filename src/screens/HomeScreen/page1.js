@@ -7,11 +7,9 @@ import {
   StyleSheet,
   StatusBar,
 } from "react-native";
-import { firebase } from '../../firebase/config'
-
-// import * as firebase from "firebase";
-// import firestore from "firebase/firestore";
-// import { config } from "../../firebase_config";
+import * as firebase from "firebase";
+import firestore from "firebase/firestore";
+import { config } from "../../firebase_config";
 import { ScrollView } from "react-native-gesture-handler";
 
 export default function page1({ navigation }) {
@@ -24,11 +22,13 @@ export default function page1({ navigation }) {
   const renderItem = ({ item, index }) => (
     <ScrollView>
       <View style={styles.item}>
-        <Text style={styles.text3}>&#12288;{index+1}</Text>
-        <Text style={styles.text3}>{item.class}</Text>
-        <Text style={styles.text3}>{item.data}</Text>
-        <Text style={styles.text3}>{item.name}</Text>
-        <Text style={styles.text3}>{item.price}</Text>
+        <Text style={[styles.text1,{width:20}]}>{index + 1}</Text>
+        <Text style={[styles.text3,{width:70}]}>{item.class}</Text>
+        <Text style={styles.text4}>{item.year}/</Text>
+        <Text style={styles.text4}>{item.month}/</Text>
+        <Text style={styles.text4}>{item.day}</Text>
+        <Text style={[styles.text3,{width:60}]}>{item.name}</Text>
+        <Text style={[styles.text3,{width:40}]}>{item.price}</Text>
       </View>
     </ScrollView>
   );
@@ -52,8 +52,10 @@ export default function page1({ navigation }) {
       querySnapshot.forEach((doc) => {
         const newRecord = {
           class: doc.data().classification,
-          date: doc.data().data,
           name: doc.data().name,
+          year: doc.data().year,
+          month: doc.data().month,
+          day: doc.data().day,
           price: doc.data().price,
         };
 
@@ -74,24 +76,26 @@ export default function page1({ navigation }) {
   //頁面顯示主程式碼
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text style={styles.text}>記帳簿</Text>
-      </View>
-      <View style={styles.details}>
-        <View style={styles.head}>
-          <Text style={styles.text2}>&#12288;</Text>
-          <Text style={styles.text2}>類別</Text>
-          <Text style={styles.text2}>日期</Text>
-          <Text style={styles.text2}>項目</Text>
-          <Text style={styles.text2}>金額</Text>
+      {/* <View style={styles.details}> */}
+        <View style={styles.table}>
+          <View style={styles.head}>
+            <Text style={[styles.text2,{width:30}]}></Text>
+            <Text style={[styles.text2,{width:70}]}>類別</Text>
+            <Text style={[styles.text2,{width:90}]}>日期</Text>
+            <Text style={[styles.text2,{width:70}]}>項目</Text>
+            <Text style={[styles.text2,{width:70}]}>金額</Text>
+            {/* <Text style={styles.text2}>修改</Text> */}
+          </View>
+          <View style={styles.list}>
+            <FlatList
+              data={records}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => "" + index}
+            ></FlatList>
+            {/* <Text>修改</Text> */}
+          </View>
         </View>
-
-        <FlatList
-          data={records}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => "" + index}
-        ></FlatList>
-      </View>
+      {/* </View> */}
     </View>
   );
 }
@@ -103,15 +107,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
+  details: {
+    borderRadius: 20,
+    height: 780,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
-    marginTop: 150,
+    marginTop: 18,
     backgroundColor: "#ffe4c4",
   },
-  details: {
-    marginTop: 20,
-    backgroundColor: "rgba(184,112,54,0.1)" ,
+  table: {
+    marginTop: 10,
+    backgroundColor: "rgba(184,112,54,0.2)",
     borderRadius: 20,
-    height: 800,
+    height: 680,
+    width: 400,
   },
   head: {
     flexDirection: "row",
@@ -121,29 +132,47 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignItems: "center",
+    width: 400,
   },
-  item: {
-    // flex: 1,
+  item: {    
     backgroundColor: "rgba(184,112,54,0.1)",
     flexDirection: "row",
     marginVertical: 3, //間距
     height: 50,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 15,
+    width: 400,
   },
   text: {
-    fontSize: 50,
+    fontSize: 40,
     color: "rgba(110,44,0,5)",
     fontWeight: "500",
   },
+  text1: {
+    fontSize: 20,
+    width: 20,
+    color: "rgba(110,44,0,5)",
+    fontWeight: "500",
+    textAlign: "center",
+  },
   text2: {
-    fontSize: 24,
-    width: 80,
+    fontSize: 18,
     color: "rgba(110,44,0,4)",
+    textAlign: "center",
   },
   text3: {
-    fontSize: 24,
-    width: 80,
+    fontSize: 18,
     color: "rgba(110,44,0,3)",
+    marginHorizontal: 10,
+    textAlign: "center",
+    // backgroundColor:'green',
+  },
+  text4: {
+    color: "rgba(110,44,0,3)",
+    // backgroundColor:'green',
+  },
+  list: {
+    flexDirection: "row",
   },
 });
