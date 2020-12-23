@@ -47,7 +47,7 @@ export default function page1({ navigation }) {
    
   }
   //刪除
-  function delete1(id){
+  function deletedata(id){
     db.collection("fullrecord").doc(user.uid).collection("record").doc(id).delete().then(function() {
       console.log("Document successfully deleted!");
   }).catch(function(error) {
@@ -111,7 +111,7 @@ export default function page1({ navigation }) {
         style: "cancel"
       },
       { text: "刪除", 
-      onPress: () => delete1(id) 
+      onPress: () => deletedata(id) 
       },
     ],
     { cancelable: false }
