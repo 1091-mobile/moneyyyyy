@@ -5,31 +5,31 @@ import {
   Text,
   YellowBox,
   StyleSheet,
-  StatusBar,
+  Alert,
+  TouchableOpacity,
+  Item
 } from "react-native";
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
-import { config } from "../../firebase_config";
+import { config } from "../../../firebase_config";
 import { ScrollView } from "react-native-gesture-handler";
+import { useReducer } from "react";
 
 export default function page1({ navigation }) {
   //似乎是因為firebase與react native的相容問題，所以會跳出警告訊息
   YellowBox.ignoreWarnings(["Setting a timer"]);
 
-  // const [modalVisible, setModalVisible] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
-
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({ item, index, onPress }) => (
     <ScrollView>
-      <View style={styles.item}>
-        <Text style={[styles.text1,{width:20}]}>{index + 1}</Text>
-        <Text style={[styles.text3,{width:70}]}>{item.class}</Text>
-        <Text style={styles.text4}>{item.year}/</Text>
-        <Text style={styles.text4}>{item.month}/</Text>
-        <Text style={styles.text4}>{item.day}</Text>
-        <Text style={[styles.text3,{width:60}]}>{item.name}</Text>
-        <Text style={[styles.text3,{width:40}]}>{item.price}</Text>
-      </View>
+      <TouchableOpacity onPress={alert} style={[styles.item]} id={index + 1}>
+        <Text style={[styles.text1, { width: 20 }]}>{index + 1}</Text>
+        <Text style={[styles.text3, { width: 70 }]}>{item.class}</Text>
+        <Text style={[styles.text4, { width: 40 }]}>{item.year}</Text>
+        <Text style={[styles.text4, { width: 20 }]}>/{item.month}</Text>
+        <Text style={[styles.text4, { width: 20 }]}>/{item.day}</Text>
+        <Text style={[styles.text3, { width: 60 }]}>{item.name}</Text>
+        <Text style={[styles.text3, { width: 40 }]}>{item.price}</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 
@@ -40,6 +40,20 @@ export default function page1({ navigation }) {
 
   //啟動firestore
   const db = firebase.firestore();
+  var user = firebase.auth().currentUser;//設user為當前登入者Auth的變數 
+  //修改
+  function update(id, index){
+   
+  }
+  //刪除
+  function delete1(){
+    // var record_ref = db.collection('record').where('id','==',index+1);
+    // record_ref.delete().then(function(querySnapshot){
+    //   querySnapshot.forEach(function(doc){
+    //     doc.ref.delete()
+    //   });
+    // })
+  }
   //把讀取的資料放到state，才會讓資料現在flatlist
   const [records, setRecords] = useState([]);
   //讀取
@@ -47,8 +61,7 @@ export default function page1({ navigation }) {
     const newRecords = [];
     try {
       //及時連到record這個集合，get他的值
-      const querySnapshot = await db.collection("record").get();
-
+      const querySnapshot = await db.collection("fullrecord/" + user.uid + "/record").get();
       querySnapshot.forEach((doc) => {
         const newRecord = {
           class: doc.data().classification,
@@ -74,27 +87,52 @@ export default function page1({ navigation }) {
     readData();
   }, []);
   //頁面顯示主程式碼
+
+  
+  const alert = () =>
+  Alert.alert(
+    "做出選擇吧",
+    "刪除後將無法復原，請慎重選擇",
+    [
+      {
+        text: "修改",
+        onPress: () => update()
+      },
+      {
+        text: "取消",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "刪除", 
+      onPress: () => delete1() 
+      },
+    ],
+    { cancelable: false }
+  );
+
+
   return (
     <View style={styles.container}>
       {/* <View style={styles.details}> */}
-        <View style={styles.table}>
-          <View style={styles.head}>
-            <Text style={[styles.text2,{width:30}]}></Text>
-            <Text style={[styles.text2,{width:70}]}>類別</Text>
-            <Text style={[styles.text2,{width:90}]}>日期</Text>
-            <Text style={[styles.text2,{width:70}]}>項目</Text>
-            <Text style={[styles.text2,{width:70}]}>金額</Text>
-            {/* <Text style={styles.text2}>修改</Text> */}
-          </View>
-          <View style={styles.list}>
-            <FlatList
-              data={records}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => "" + index}
-            ></FlatList>
-            {/* <Text>修改</Text> */}
-          </View>
+      <View style={styles.table}>
+        <View style={styles.head}>
+          <Text style={[styles.text2, { width: 30 }]}></Text>
+          <Text style={[styles.text2, { width: 70 }]}>類別</Text>
+          <Text style={[styles.text2, { width: 90 }]}>日期</Text>
+          <Text style={[styles.text2, { width: 70 }]}>項目</Text>
+          <Text style={[styles.text2, { width: 70 }]}>金額</Text>
+          {/* <Text style={styles.text2}>修改</Text> */}
         </View>
+        <View style={styles.list}>
+          <FlatList
+            data={records}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => "" + index}
+            onPress={alert}
+          ></FlatList>
+          {/* <Text>修改</Text> */}
+        </View>
+      </View>
       {/* </View> */}
     </View>
   );
@@ -118,7 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffe4c4",
   },
   table: {
-    marginTop: 10,
     backgroundColor: "rgba(184,112,54,0.2)",
     borderRadius: 20,
     height: 680,
@@ -134,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 400,
   },
-  item: {    
+  item: {
     backgroundColor: "rgba(184,112,54,0.1)",
     flexDirection: "row",
     marginVertical: 3, //間距
