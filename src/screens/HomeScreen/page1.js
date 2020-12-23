@@ -14,6 +14,7 @@ import firestore from "firebase/firestore";
 import { config } from "../../../firebase_config";
 import { ScrollView } from "react-native-gesture-handler";
 import { useReducer } from "react";
+import Toast from 'react-native-toast-message';
 
 export default function page1({ navigation }) {
   //似乎是因為firebase與react native的相容問題，所以會跳出警告訊息
@@ -21,7 +22,7 @@ export default function page1({ navigation }) {
 
   const renderItem = ({ item, index, onPress }) => (
     <ScrollView>
-      <TouchableOpacity onPress={alert} style={[styles.item]} id={index + 1}>
+      <TouchableOpacity onPress={()=>alert(item.id)} style={[styles.item]}>
         <Text style={[styles.text1, { width: 20 }]}>{index + 1}</Text>
         <Text style={[styles.text3, { width: 70 }]}>{item.class}</Text>
         <Text style={[styles.text4, { width: 40 }]}>{item.year}</Text>
@@ -46,8 +47,13 @@ export default function page1({ navigation }) {
    
   }
   //刪除
-  function delete1(){
-    // var record_ref = db.collection('record').where('id','==',index+1);
+  function delete1(id){
+    db.collection("fullrecord").doc(user.uid).collection("record").doc(id).delete().then(function() {
+      console.log("Document successfully deleted!");
+  }).catch(function(error) {
+      console.error("Error removing document: ", error);
+  });
+    // var record_ref = db.collection('fullrecord').where('id','==',index+1);ç
     // record_ref.delete().then(function(querySnapshot){
     //   querySnapshot.forEach(function(doc){
     //     doc.ref.delete()
@@ -60,8 +66,8 @@ export default function page1({ navigation }) {
   async function readData() {
     const newRecords = [];
     try {
-      //及時連到record這個集合，get他的值
-      const querySnapshot = await db.collection("fullrecord/" + user.uid + "/record").get();
+      //及時連到record這個集合，get他的值 snapshot 可以立刻改變
+      const querySnapshot = await db.collection("fullrecord/" + user.uid + "/record").get();//get 不能刪若沒有 get 無法抓資料
       querySnapshot.forEach((doc) => {
         const newRecord = {
           class: doc.data().classification,
@@ -70,6 +76,7 @@ export default function page1({ navigation }) {
           month: doc.data().month,
           day: doc.data().day,
           price: doc.data().price,
+          id: doc.id, //抓 doc.id 再丟 reference 刪除
         };
 
         newRecords.push(newRecord);
@@ -89,7 +96,7 @@ export default function page1({ navigation }) {
   //頁面顯示主程式碼
 
   
-  const alert = () =>
+  const alert = (id) =>
   Alert.alert(
     "做出選擇吧",
     "刪除後將無法復原，請慎重選擇",
@@ -104,7 +111,7 @@ export default function page1({ navigation }) {
         style: "cancel"
       },
       { text: "刪除", 
-      onPress: () => delete1() 
+      onPress: () => delete1(id) 
       },
     ],
     { cancelable: false }
