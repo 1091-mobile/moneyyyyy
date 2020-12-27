@@ -15,7 +15,7 @@ import LoadingScreen from './src/screens/LoadingScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 
 import HomeScreen from './src/screens/HomeScreen'
-import ChartScreen from './src/screens/ChartScreen'
+import ChartScreen from './src/screens/ChartScreen/Chart'
 import AccountScreen from './src/screens/AccountScreen'
 import { firebase } from "./src/firebase/config"
 
