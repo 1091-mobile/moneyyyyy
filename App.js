@@ -15,6 +15,7 @@ import LoginScreen from './src/screens/LoginScreen'
 import LoadingScreen from './src/screens/LoadingScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 
+import AddScreen from './src/screens/AddScreen'
 import HomeScreen from './src/screens/HomeScreen'
 import ChartScreen from './src/screens/ChartScreen/Chart'
 import AccountScreen from './src/screens/AccountScreen'
@@ -22,13 +23,25 @@ import { firebase } from "./src/firebase/config"
 
 const AppTabNavigator = createBottomTabNavigator(
   {
-    記帳: {
+    消費紀錄: {
       // screen: AccountScreen,
       // navigationOption: {
       //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
       // }
 
       screen: AccountScreen,
+        navigationOptions: {
+            tabBarLabel: '消費紀錄',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
+        }
+    },
+    記帳: {
+      // screen: AccountScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
+      // }
+
+      screen: AddScreen,
         navigationOptions: {
             tabBarLabel: '記帳',
             tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
