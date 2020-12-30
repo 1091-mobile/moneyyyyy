@@ -9,6 +9,7 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import {Ionicons} from "@expo/vector-icons";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginScreen from './src/screens/LoginScreen'
 import LoadingScreen from './src/screens/LoadingScreen'
@@ -22,22 +23,40 @@ import { firebase } from "./src/firebase/config"
 const AppTabNavigator = createBottomTabNavigator(
   {
     記帳: {
+      // screen: AccountScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
+      // }
+
       screen: AccountScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ion-book" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '記帳',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
+        }
     },
     圖表: {
+      // screen: ChartScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-md-analytics" size={24} color={tintColor}/>
+      // }
+
       screen: ChartScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ion-md-analytics" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '圖表',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
+        }
     }, 
     個人資料: {
+      // screen: HomeScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Iconicons name="ios-person" size={24} color={tintColor}/>
+      // }
+
       screen: HomeScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ios-person" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '個人資料',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
+        }
     }
   },
   {
