@@ -58,7 +58,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: ChartScreen,
         navigationOptions: {
             tabBarLabel: '圖表',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-md-analytics' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-analytics' } color={ tintColor }/>
         }
     }, 
     HomeScreen: {
