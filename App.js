@@ -20,10 +20,12 @@ import HomeScreen from './src/screens/HomeScreen'
 import ChartScreen from './src/screens/ChartScreen/Chart'
 import AccountScreen from './src/screens/AccountScreen'
 import { firebase } from "./src/firebase/config"
+require('react-native').unstable_enableLogBox();
+console.disableYellowBox = true;
 
 const AppTabNavigator = createBottomTabNavigator(
   {
-    消費紀錄: {
+    AccountScreen: {
       // screen: AccountScreen,
       // navigationOption: {
       //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
@@ -32,10 +34,10 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: AccountScreen,
         navigationOptions: {
             tabBarLabel: '消費紀錄',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'basket' } color={ tintColor }/>
         }
     },
-    記帳: {
+    AddScreen: {
       // screen: AccountScreen,
       // navigationOption: {
       //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
@@ -44,10 +46,10 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: AddScreen,
         navigationOptions: {
             tabBarLabel: '記帳',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'pencil' } color={ tintColor }/>
         }
     },
-    圖表: {
+    ChartScreen: {
       // screen: ChartScreen,
       // navigationOption: {
       //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-md-analytics" size={24} color={tintColor}/>
@@ -56,10 +58,10 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: ChartScreen,
         navigationOptions: {
             tabBarLabel: '圖表',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'md-analytics' } color={ tintColor }/>
         }
     }, 
-    個人資料: {
+    HomeScreen: {
       // screen: HomeScreen,
       // navigationOption: {
       //   tabBarIcon: ({tintColor}) => <Iconicons name="ios-person" size={24} color={tintColor}/>
@@ -68,7 +70,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: HomeScreen,
         navigationOptions: {
             tabBarLabel: '個人資料',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'person' } color={ tintColor }/>
         }
     }
   },
@@ -80,11 +82,12 @@ const AppTabNavigator = createBottomTabNavigator(
       // showLabel: false,
       style:{
         backgroundColor: '#7c7877',
+        height: 60
       },
       labelStyle: {
         fontSize: 15,
         fontWeight: "bold",
-        margin: 0
+        marginBottom: 8
       }
     }
   }
