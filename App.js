@@ -34,7 +34,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: AccountScreen,
         navigationOptions: {
             tabBarLabel: '消費紀錄',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'basket' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-basket' } color={ tintColor }/>
         }
     },
     AddScreen: {
@@ -46,7 +46,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: AddScreen,
         navigationOptions: {
             tabBarLabel: '記帳',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'pencil' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-pencil' } color={ tintColor }/>
         }
     },
     ChartScreen: {
@@ -58,7 +58,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: ChartScreen,
         navigationOptions: {
             tabBarLabel: '圖表',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'md-analytics' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-md-analytics' } color={ tintColor }/>
         }
     }, 
     HomeScreen: {
@@ -70,7 +70,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: HomeScreen,
         navigationOptions: {
             tabBarLabel: '個人資料',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'person' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
         }
     }
   },
