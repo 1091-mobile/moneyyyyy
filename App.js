@@ -9,35 +9,69 @@ import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import {createBottomTabNavigator} from 'react-navigation-tabs'
 import {Ionicons} from "@expo/vector-icons";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginScreen from './src/screens/LoginScreen'
 import LoadingScreen from './src/screens/LoadingScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 
+import AddScreen from './src/screens/AddScreen'
 import HomeScreen from './src/screens/HomeScreen'
 import ChartScreen from './src/screens/ChartScreen/Chart'
 import AccountScreen from './src/screens/AccountScreen'
 import { firebase } from "./src/firebase/config"
+require('react-native').unstable_enableLogBox();
+console.disableYellowBox = true;
 
 const AppTabNavigator = createBottomTabNavigator(
   {
-    記帳: {
+    AccountScreen: {
+      // screen: AccountScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
+      // }
+
       screen: AccountScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ion-book" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '消費紀錄',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-basket' } color={ tintColor }/>
+        }
     },
-    圖表: {
+    AddScreen: {
+      // screen: AccountScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-book" size={24} color={tintColor}/>
+      // }
+
+      screen: AddScreen,
+        navigationOptions: {
+            tabBarLabel: '記帳',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-pencil' } color={ tintColor }/>
+        }
+    },
+    ChartScreen: {
+      // screen: ChartScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Ionicons name="ios-md-analytics" size={24} color={tintColor}/>
+      // }
+
       screen: ChartScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ion-md-analytics" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '圖表',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-analytics' } color={ tintColor }/>
+        }
     }, 
-    個人資料: {
+    HomeScreen: {
+      // screen: HomeScreen,
+      // navigationOption: {
+      //   tabBarIcon: ({tintColor}) => <Iconicons name="ios-person" size={24} color={tintColor}/>
+      // }
+
       screen: HomeScreen,
-      navigationOption: {
-        tabBarIcon: ({tintColor}) => <Ionicons name="ios-person" size={24} color={tintColor}/>
-      }
+        navigationOptions: {
+            tabBarLabel: '個人資料',
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-person' } color={ tintColor }/>
+        }
     }
   },
   {
@@ -48,11 +82,12 @@ const AppTabNavigator = createBottomTabNavigator(
       // showLabel: false,
       style:{
         backgroundColor: '#7c7877',
+        height: 60
       },
       labelStyle: {
         fontSize: 15,
         fontWeight: "bold",
-        margin: 0
+        marginBottom: 8
       }
     }
   }

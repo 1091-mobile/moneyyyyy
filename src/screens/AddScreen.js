@@ -19,7 +19,7 @@ import RadioFrom, {
 
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
-import { config } from "../../../firebase_config";
+import { config } from "../../firebase_config";
 
 
 
