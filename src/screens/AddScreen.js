@@ -11,11 +11,9 @@ import {
   Picker,
 } from "react-native";
 
-import RadioFrom, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from "react-native-simple-radio-button";
+import DatePicker from 'react-native-datepicker';
+
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 import * as firebase from "firebase";
 import firestore from "firebase/firestore";
@@ -24,13 +22,13 @@ import { config } from "../../firebase_config";
 
 
 
-var gender = [
-  { label: "食", value: 0 },
-  { label: "衣", value: 1 },
-  { label: "住", value: 2 },
-  { label: "行", value: 3 },
-  { label: "育", value: 4 },
-  { label: "樂", value: 5 }
+var type = [
+  { label: "食", value: "食" },
+  { label: "衣", value: "衣" },
+  { label: "住", value: "住" },
+  { label: "行", value: "行" },
+  { label: "育", value: "育" },
+  { label: "樂", value: "樂" }
 ];
 export default function RecordAdd(){
   
@@ -39,10 +37,6 @@ export default function RecordAdd(){
   const [classification, setClassification] = useState("");
 
   const [price, setPrice] = useState("");
-
-  const [year, setYear] = useState("");
-
-  const [month, setMonth] = useState("");
 
   const [date, setDate] = useState("");
 
@@ -66,15 +60,11 @@ export default function RecordAdd(){
 
         classification: classification,
 
-        date: parseInt(date),
-
-        month: parseInt(month),
-
         note: note,
 
-        year: parseInt(year),
+        price: parseInt(price),
 
-        price: parseInt(price)
+        date: date
 
       });
 
@@ -84,17 +74,9 @@ export default function RecordAdd(){
 
       setPrice("");
 
-      setYear("");
-
-      setMonth("");
-
-      setDate("");
-
       setNote("");
 
-      setClassification("");
-
-      
+      setDate("");
 
     }
 
@@ -103,28 +85,6 @@ export default function RecordAdd(){
       console.error("Error adding document: ", error);
 
     }
-
-  }
-
-
-
-  function cancel(){
-
-      setClassification("");
-
-      setPrice("");
-
-      setYear("");
-
-      setMonth("");
-
-      setDate("");
-
-      setNote("");
-
-      setClassification("");
-
-    
 
   }
   
@@ -141,32 +101,49 @@ export default function RecordAdd(){
           style={[styles.input, { marginBottom: 30 }]}
            value={price} onChangeText={text=>setPrice(text)}/>
 
-          <Text style={{color:"#6E6EFF"}}>詳細說明</Text>
+          <Text style={{color:"#6E6EFF"}}>項目名稱</Text>
           <TextInput
           style={[styles.input, { marginBottom: 30 }]}
           value={note} onChangeText={text=>setNote(text)}/>
 
+          <Text style={styles.title}>時間</Text>
+
+          <DatePicker
+          style={styles.datePickerStyle}
+          date={date} //initial date from state
+          mode="date" //The enum of date, datetime and time
+          placeholder="select date"
+          format="DD-MM-YYYY"
+          minDate=""
+          maxDate=""
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setDate(date);
+          }}
+          />
+
           <Text style={styles.title}>分類</Text>
           
-          <RadioFrom
-          radio_props={gender}
-          onPress={(Value) => {}}
-          initial={0} //預設
-          buttonSize={10}
-          buttonOuterSize={20}
-          buttonColor={"#7DA09F"}
-          selectedButtonColor={"#7DA09F"}
-          selecterLabelColor={"black"}
-          labelStyle={{
-            fontSize: 20,
-            padding: 0,
-            marginRight: 5,
-            justifyContent: "center",
-            width: 35,
-            color: "black",
-          }}
-          style={styles.radio}
-        />
+          <RadioForm
+          radio_props={type}
+          placeholder=""
+          value={classification}
+          initial={0}
+          onPress={(value) => setClassification(value)}
+          style={styles.radio}/>
         
         <TouchableOpacity style={styles.btn} >
         <Button style={styles.btnword} onPress={update} title="確認"></Button>
@@ -181,7 +158,7 @@ export default function RecordAdd(){
   const styles = StyleSheet.create({
     radio: {
       flexDirection: "row",
-      marginTop: 20,
+      marginTop: 10,
     },
     container: {
       flex: 1,
@@ -251,4 +228,3 @@ export default function RecordAdd(){
     },
   });
   
-
