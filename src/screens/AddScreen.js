@@ -140,10 +140,9 @@ export default function RecordAdd(){
           <RadioForm
           radio_props={type}
           placeholder=""
-          value={classification}
-          initial={0}
+          initial={1}
           onPress={(value) => setClassification(value)}
-          style={styles.radio}/>
+          formHorizontal={true}/>
         
         <TouchableOpacity style={styles.btn} >
         <Button style={styles.btnword} onPress={update} title="確認"></Button>
@@ -156,10 +155,7 @@ export default function RecordAdd(){
 
   
   const styles = StyleSheet.create({
-    radio: {
-      flexDirection: "row",
-      marginTop: 10,
-    },
+    
     container: {
       flex: 1,
       backgroundColor: "#ffe4c4",
