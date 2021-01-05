@@ -42,12 +42,15 @@ export default class RegisterScreen extends React.Component {
             .auth()
             .createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then((response) => {
+                
                 const uid = response.user.uid
                 const data = {
                     id: uid,
                     email: this.state.email,
                     displayName: this.state.displayName,
                 };
+
+                response.user.updateProfile({ displayName: data.displayName});
                 const usersRef = firebase.firestore().collection('users')
                 usersRef
                     .doc(uid)
