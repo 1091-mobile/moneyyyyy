@@ -5,8 +5,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import * as firebase from "firebase";
 import { render } from 'react-dom';
 
-//尚未完成功能
-//1.靠邀 發現我把月份寫死了 要改
 
 //已完成功能
 //1.圖表前端介面
@@ -44,18 +42,19 @@ let user = firebase.auth().currentUser;
       }}>當月數據圖表 :{month}月</Text>
     </View>  
     <WebView 
-    injectedJavaScript={'alert("hello")'}
+
     javaScriptEnabled={true}
     //injecterjs一定要搭配onMessage欸 莫名其妙欸 https://github.com/react-native-webview/react-native-webview/issues/1260
     onMessage={(event)=> Alert.alert(event.nativeEvent.data) }
     //startInLoadingState="true" 
     renderLoading={displaySpinner}  
     source={require(charturl)} 
-    // source={{uri:'https://codepen.io/0430shinyu/full/QWKqjgY'+'?test=2'}}
+
     //onMessage event is required as well to inject the JavaScript code into the WebView.
-    // useref="webview"
     //網路上都沒有看到別人這樣寫，幾乎都用 document...value=? 跟onMessage傳
-    injectedJavaScript={`chart("${user.uid}")`}
+    injectedJavaScript={`chart("${user.uid}");
+    `
+  }
      />
 </View>
   );
