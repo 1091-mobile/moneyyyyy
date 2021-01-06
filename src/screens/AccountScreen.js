@@ -79,7 +79,7 @@ export default function AccountScreen() {
         const newRecord = {
           class: doc.data().classification,
           name: doc.data().name,
-          date:doc.data().date1,
+          date:doc.data().date,
           price: doc.data().price,
           id: doc.id, //抓 doc.id 再丟 reference 刪除
         };
@@ -179,11 +179,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffe4c4",
   },
   table: {
+    flex: 0.9,
     backgroundColor: "rgba(184,112,54,0.2)",
     borderRadius: 20,
-    height: 680,
+    // height: 680,
     width: 400,
-    marginTop: 20,
+    marginTop: 50,
   },
   head: {
     flexDirection: "row",
@@ -234,9 +235,10 @@ const styles = StyleSheet.create({
   },
   list: {
     flexDirection: "row",
-    height: 625,
+    height: 610,
   },
   total: {
+    flex: 0.1,
     flexDirection: "row",
     width: 300,
     alignItems: "center",
