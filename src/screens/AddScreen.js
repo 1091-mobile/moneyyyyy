@@ -114,8 +114,7 @@ export default function RecordAdd(){
           mode="date" //The enum of date, datetime and time
           placeholder="select date"
           format="DD-MM-YYYY"
-          minDate=""
-          maxDate=""
+          
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
