@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Button,
   Picker,
+  Modal,
 } from "react-native";
 
 import DatePicker from 'react-native-datepicker';
@@ -30,17 +31,19 @@ var type = [
   { label: "育", value: "育" },
   { label: "樂", value: "樂" }
 ];
-export default function RecordUpdate(){
+export default function RecordUpdate(props){
   
   
   var user = firebase.auth().currentUser;
   const [classification, setClassification] = useState("");
 
-  const [price, setPrice] = useState("");
+  const [updateprice, setPrice] = useState("");
 
-  const [date, setDate] = useState("");
+  const [updatedate, setDate] = useState("");
 
-  const [note, setNote] = useState("");
+  const [updatenote, setNote] = useState("");
+
+  var price = updateprice;
 
   if (!firebase.apps.length) {
 
@@ -76,11 +79,15 @@ export default function RecordUpdate(){
         console.log("加入失敗", error);
       });
 
+      console.log('123');
+      console.log(props);
       console.log(docRef.id);
+      console.log(docRef.price);
+      console.log(docRef);
 
       setClassification("");
 
-      setPrice("");
+      setPrice(price);
 
       setNote("");
 
@@ -93,11 +100,18 @@ export default function RecordUpdate(){
       console.error("Error adding document: ", error);
 
     }
+    console.log("分隔線");
+    console.log(id);
+    console.log(note);
+    console.log(props.note);
+    console.log(price);
+    console.log(props.price);
 
   }
   
   
     return (
+      <Modal visible={props.modalVisible}>
       <View style={styles.container}>
         
         <Text
@@ -112,13 +126,13 @@ export default function RecordUpdate(){
           <Text style={{color:"#6E6EFF"}}>項目名稱</Text>
           <TextInput
           style={[styles.input, { marginBottom: 30 }]}
-          value={note} onChangeText={text=>setNote(text)}/>
+          value={price} onChangeText={text=>setNote(text)}/>
 
           <Text style={styles.title}>時間</Text>
-
+          
           <DatePicker
           style={styles.datePickerStyle}
-          date={date} //initial date from state
+          date={updatedate} //initial date from state
           mode="date" //The enum of date, datetime and time
           placeholder="select date"
           format="DD-MM-YYYY"
@@ -157,6 +171,7 @@ export default function RecordUpdate(){
       </TouchableOpacity>
 
       </View>
+      </Modal>
     );  
   }
 

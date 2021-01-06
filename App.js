@@ -46,7 +46,7 @@ const AppTabNavigator = createBottomTabNavigator(
       screen: AddScreen,
         navigationOptions: {
             tabBarLabel: '記帳',
-            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-pencil' } color={ tintColor }/>
+            tabBarIcon:({tintColor}) => <Icon size={ 24 } name={ 'ios-book' } color={ tintColor }/>
         }
     },
     ChartScreen: {
