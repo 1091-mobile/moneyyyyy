@@ -79,7 +79,7 @@ export default function AccountScreen() {
         const newRecord = {
           class: doc.data().classification,
           name: doc.data().name,
-          date:doc.data().date1,
+          date:doc.data().date,
           price: doc.data().price,
           id: doc.id, //抓 doc.id 再丟 reference 刪除
         };
