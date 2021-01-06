@@ -139,7 +139,6 @@ export default function RecordAdd(){
           
           <RadioForm
           radio_props={type}
-          placeholder=""
           initial={1}
           onPress={(value) => setClassification(value)}
           formHorizontal={true}/>
